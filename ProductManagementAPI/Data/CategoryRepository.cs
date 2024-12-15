@@ -24,33 +24,60 @@ public class CategoryRepository : ICategoryRepository
         _transaction = transaction;
     }
 
+    //public async Task<IEnumerable<Category>> GetAllAsync()
+    //{
+    //    return await _connection.QueryAsync<Category>("SELECT * FROM Categories", transaction: _transaction);
+    //}
+
+    //public async Task<Category> GetByIdAsync(int id)
+    //{
+    //    return await _connection.QueryFirstOrDefaultAsync<Category>(
+    //        "SELECT * FROM Categories WHERE Id = @Id", new { Id = id }, transaction: _transaction);
+    //}
+
+    //public async Task AddAsync(Category category)
+    //{
+    //    await _connection.ExecuteAsync(
+    //        "INSERT INTO Categories (Name) VALUES (@Name)", category, transaction: _transaction);
+    //}
+
+    //public async Task UpdateAsync(Category category)
+    //{
+    //    await _connection.ExecuteAsync(
+    //        "UPDATE Categories SET Name = @Name WHERE Id = @Id", category, transaction: _transaction);
+    //}
+
+    //public async Task DeleteAsync(int id)
+    //{   
+    //    await _connection.ExecuteAsync(
+    //        "DELETE FROM Categories WHERE Id = @Id", new { Id = id }, transaction: _transaction);
+    //}
+
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        return await _connection.QueryAsync<Category>("SELECT * FROM Categories", transaction: _transaction);
+        return await _connection.QueryAsync<Category>(
+            "SP_GetAllCategory", commandType: CommandType.StoredProcedure, transaction: _transaction);
     }
-
     public async Task<Category> GetByIdAsync(int id)
     {
         return await _connection.QueryFirstOrDefaultAsync<Category>(
-            "SELECT * FROM Categories WHERE Id = @Id", new { Id = id }, transaction: _transaction);
+            "SP_GetCategoryById", new { Id = id }, commandType: CommandType.StoredProcedure, transaction: _transaction);
     }
-
     public async Task AddAsync(Category category)
     {
         await _connection.ExecuteAsync(
-            "INSERT INTO Categories (Name) VALUES (@Name)", category, transaction: _transaction);
+            "SP_CreateCategory", new { Name = category.Name }, commandType: CommandType.StoredProcedure, transaction: _transaction);
     }
-
     public async Task UpdateAsync(Category category)
     {
         await _connection.ExecuteAsync(
-            "UPDATE Categories SET Name = @Name WHERE Id = @Id", category, transaction: _transaction);
+            "SP_UpdateCategory", new { Id = category.Id, Name = category.Name }, commandType: CommandType.StoredProcedure, transaction: _transaction);
+    }
+    public async Task DeleteAsync(int id)
+    {
+        await _connection.ExecuteAsync(
+            "SP_DeleteCategory", new { Id = id }, commandType: CommandType.StoredProcedure, transaction: _transaction);
     }
 
-    public async Task DeleteAsync(int id)
-    {   
-        await _connection.ExecuteAsync(
-            "DELETE FROM Categories WHERE Id = @Id", new { Id = id }, transaction: _transaction);
-    }
 }
 

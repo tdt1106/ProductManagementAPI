@@ -1,4 +1,5 @@
-﻿using ProductManagementAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductManagementAPI.Data;
 using ProductManagementAPI.Models;
 
 namespace ProductManagementAPI.Services;
@@ -23,7 +24,7 @@ public class ProductService : IProductService
     }
 
     public async Task AddProductAsync(Product product)
-    {
+    { 
         await _unitOfWork.ProductRepository.AddAsync(product);
         await _unitOfWork.CommitAsync();
     }

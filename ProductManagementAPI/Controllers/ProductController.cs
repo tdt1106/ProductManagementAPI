@@ -18,6 +18,7 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll() 
         => Ok(await _productService.GetAllProductsAsync());
+     
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
@@ -29,6 +30,7 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Product product)
     {
+        
         await _productService.AddProductAsync(product);
         return CreatedAtAction(nameof(GetById), 
             new { 
